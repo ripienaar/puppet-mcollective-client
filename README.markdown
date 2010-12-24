@@ -80,7 +80,7 @@ notice: /Stage[main]/Packages/Deploy_package[zsh]/Mcollective[deploy_package_zsh
 notice: /Stage[main]//Restart_service[httpd]/Mcollective[restart_service_httpd]/ensure: created
 notice: /Stage[main]//Angelia[hello world]/Mcollective[angelia_notify_hello world]/ensure: created
 notice: /Stage[main]//Exec[done]/returns:  _____________________
-notice: /Stage[main]//Exec[done]/returns: < finished spammning! >
+notice: /Stage[main]//Exec[done]/returns: &lt; finished spammning! &gt;
 notice: /Stage[main]//Exec[done]/returns:  ---------------------
 notice: /Stage[main]//Exec[done]/returns:         \   ^__^
 notice: /Stage[main]//Exec[done]/returns:          \  (oo)\_______
@@ -118,7 +118,7 @@ info: Mcollective[angelia_notify_hello world](provider=mcollective): Result from
 notice: /Stage[main]//Angelia[hello world]/Mcollective[angelia_notify_hello world]/ensure: created
 info: /Stage[main]//Angelia[hello world]/Mcollective[angelia_notify_hello world]: Scheduling refresh of Exec[done]
 notice: /Stage[main]//Exec[done]/returns:  _____________________
-notice: /Stage[main]//Exec[done]/returns: < finished spammning! >
+notice: /Stage[main]//Exec[done]/returns: &lt; finished spammning! &gt;
 notice: /Stage[main]//Exec[done]/returns:  ---------------------
 notice: /Stage[main]//Exec[done]/returns:         \   ^__^
 notice: /Stage[main]//Exec[done]/returns:          \  (oo)\_______
