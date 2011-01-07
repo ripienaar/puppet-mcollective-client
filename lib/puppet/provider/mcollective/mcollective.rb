@@ -12,7 +12,7 @@ Puppet::Type.type(:mcollective).provide :mcollective do
         # this prevents it from parsing command line
         # arguments etc
         options = {:verbose    => false,
-                   :disctimeout=> 2,
+                   :disctimeout=> resource[:disctimeout].to_f,
                    :config     => resource[:config],
                    :filter     => MCollective::Util.empty_filter}
 

@@ -57,6 +57,12 @@ Puppet::Type.newtype(:mcollective) do
         defaultto false
     end
 
+    newparam(:disctimeout) do
+        desc "Timeout for doing discovery in seconds."
+
+        defaultto 2
+    end
+
     validate do
         self.fail "Agent name is required" unless self[:agent]
         self.fail "Action name is required" unless self[:action]
