@@ -18,7 +18,6 @@ define deploy_package($fact_filter = "", $identity_filter="", $fact_filter="", $
         identity_filter => $identity_filter,
         class_filter    => $class_filter,
         arguments       => {"package" => $name},
-        ensure          => "present",
     }
 }
 
@@ -31,7 +30,6 @@ define restart_service($fact_filter = "", $identity_filter="", $fact_filter="", 
         identity_filter => $identity_filter,
         class_filter    => $class_filter,
         arguments       => {"service" => $name},
-        ensure          => "present",
     }
 }
 
@@ -42,7 +40,6 @@ define angelia($recipient, $subject) {
         agent           => "angelianotify",
         action          => "sendmsg",
         arguments       => {"message" => $name, "recipient" => $recipient, "subject" => $subject},
-        ensure          => "present",
         limit_nodes     => 1,
     }
 }
