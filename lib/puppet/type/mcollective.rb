@@ -63,6 +63,12 @@ Puppet::Type.newtype(:mcollective) do
         defaultto 2
     end
 
+    newparam(:timeout) do
+        desc "Timeout for calling remote agents."
+
+        defaultto 5
+    end
+
     validate do
         self.fail "Agent name is required" unless self[:agent]
         self.fail "Action name is required" unless self[:action]
