@@ -7,7 +7,7 @@ Puppet::Type.type(:mcollective).provide :mcollective do
 
     commands :mcrpc => "mc-rpc"
 
-    def create
+    def call_rpc
         # Create options and supply them to the client
         # this prevents it from parsing command line
         # arguments etc
@@ -64,12 +64,5 @@ Puppet::Type.type(:mcollective).provide :mcollective do
         elsif no_responses.size > 0
             self.fail "No responses from #{no_responses.size} node(s)"
         end
-    end
-
-    def destroy
-    end
-
-    def exists?
-        false
     end
 end
