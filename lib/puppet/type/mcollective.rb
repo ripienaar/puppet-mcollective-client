@@ -109,7 +109,6 @@ Puppet::Type.newtype(:mcollective) do
         defaultto false
     end
 
-
     newparam(:action) do
         desc "The action to call"
     end
@@ -129,11 +128,19 @@ Puppet::Type.newtype(:mcollective) do
     newparam(:disctimeout) do
         desc "Timeout for doing discovery in seconds."
 
+        validate do |val|
+            raise ArgumentError, "value must be a number greater than zero." if not @resource.is_pos_float?(val)
+        end
+
         defaultto 2
     end
 
     newparam(:timeout) do
         desc "Timeout for calling remote agents."
+
+        validate do |val|
+            raise ArgumentError, "value must be a number greater than zero." if not @resource.is_pos_float?(val)
+        end
 
         defaultto 5
     end
@@ -141,5 +148,14 @@ Puppet::Type.newtype(:mcollective) do
     validate do
         self.fail "Agent name is required" unless self[:agent]
         self.fail "Action name is required" unless self[:action]
+    end
+
+    def is_pos_float?(val)
+        is_num = begin Float(val) ; true end rescue false
+        if (is_num) and (val.to_f > 0) then
+            true
+        else
+            false
+        end
     end
 end
