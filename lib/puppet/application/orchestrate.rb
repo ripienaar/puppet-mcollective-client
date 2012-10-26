@@ -1,31 +1,32 @@
 require 'puppet/application'
 require 'puppet/run'
 
-class Puppet::Application::Orchastrate < Puppet::Application
-
+class Puppet::Application::Orchestrate < Puppet::Application
   option("--debug","-d")
   option("--verbose","-v")
 
   def help
     <<-HELP
-puppet-orchastrate(8) -- Orchastrates a series of MCollective RPC requests
+puppet-orchestrate(8) -- Orchestrates a series of MCollective RPC requests
 ======
 
 SYNOPSIS
 --------
-Parses a Puppet Orchastration script to the local MCollective infrastructure
+Parses a Puppet Orchestration script to the local MCollective infrastructure
 
 USAGE
 -----
-puppet orchastrate [-d|--debug] [-v|--verbose] <file> <var=val> <var=val> ...
+puppet orchestrate [-d|--debug] [-v|--verbose] <file> <var=val> <var=val> ...
 
 DESCRIPTION
 -----------
-A convenient way to run a Puppet Orchastration script and supply parameters to it
+A convenient way to run a Puppet Orchestration script and supply parameters to it
 HELP
   end
 
   def setup
+    exit(Puppet.settings.print_configs ? 0 : 1) if Puppet.settings.print_configs?
+
     Puppet::Util::Log.newdestination(:console) unless options[:logset]
 
     Signal.trap(:INT) do
@@ -49,7 +50,9 @@ HELP
     if command_line.args.length > 0
       manifest = command_line.args.shift
 
-      raise("Could not find orchastration script %s" % manifest) unless ::File.exist?(manifest)
+      manifest = "%s.mc" % manifest unless manifest =~ /\.mc$/
+
+      raise("Could not find orchestration script %s" % manifest) unless ::File.exist?(manifest)
 
       Puppet[:manifest] = manifest
     else

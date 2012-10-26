@@ -10,7 +10,7 @@ Puppet::Type.type(:mcollective).provide :mcollective do
     # this prevents it from parsing command line
     # arguments etc
     options = {:verbose      => false,
-               :config       => (resource[:config] || MCollective::Util.config_file_for_user),
+               :config       => MCollective::Util.config_file_for_user,
                :progress_bar => false,
                :filter       => MCollective::Util.empty_filter}
 
@@ -27,21 +27,9 @@ Puppet::Type.type(:mcollective).provide :mcollective do
       client.compound_filter(resource[:compound_filter])
     end
 
-    if resource[:identity_filter]
-      resource[:identity_filter].each {|f| client.identity_filter f}
-    end
-
-    if resource[:class_filter]
-      resource[:class_filter].each {|f| client.class_filter f}
-    end
-
-    if resource[:fact_filter]
-      if resource[:fact_filter].respond_to?(:each_pair)
-        resource[:fact_filter].each_pair {|f,v| client.fact_filter f, v}
-      else
-        self.fail "Could not parse fact filter"
-      end
-    end
+    Array(resource[:identity_filter]).each {|f| client.identity_filter f}
+    Array(resource[:class_filter]).each {|f| client.class_filter f}
+    Array(resource[:fact_filter]).each {|f| client.fact_filter f}
 
     client
   end
@@ -69,6 +57,8 @@ Puppet::Type.type(:mcollective).provide :mcollective do
     end
 
     Puppet.debug("Completed after %d tries" % try)
+
+    {:tries => try, :nodes => client.stats.responses}
   end
 
   def attempt_rpc_call(client)

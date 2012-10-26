@@ -63,7 +63,7 @@ Puppet::Type.newtype(:mcollective) do
     desc "The agent to call"
 
     def change_to_s(currentvalue, newvalue)
-      "executed succesfully"
+      @sync_msg
     end
 
     def retrieve
@@ -75,7 +75,12 @@ Puppet::Type.newtype(:mcollective) do
     end
 
     def sync
-      provider.call_rpc
+      stats = provider.call_rpc
+
+      stats[:nodes] == 1 ? nodes = "node" : nodes = "node"
+      stats[:tries] == 1 ? tries = "try" : tries = "tries"
+
+      @sync_msg = "%s#%s executed succesfully on %d %s after %d %s" % [resource[:agent], resource[:action], stats[:nodes], nodes, stats[:tries], tries]
     end
   end
 
@@ -83,12 +88,6 @@ Puppet::Type.newtype(:mcollective) do
     desc "A name for this job"
 
     isnamevar
-  end
-
-  newparam(:config) do
-    desc "Configuration file to use"
-
-    defaultto false
   end
 
   newparam(:compound_filter) do
