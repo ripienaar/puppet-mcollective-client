@@ -151,6 +151,26 @@ Puppet::Type.newtype(:mcollective) do
     defaultto false
   end
 
+  newparam(:tries) do
+    desc "Retries the RPC call a number of times, fails only if it never gets a successfull result set"
+
+    validate do |val|
+      raise ArgumentError, "value must be a number greater than zero." if not @resource.is_pos_float?(val)
+    end
+
+    defaultto 1
+  end
+
+  newparam(:try_sleep_time) do
+    desc "How long to wait between each attempt to run the action"
+
+    validate do |val|
+      raise ArgumentError, "value must be a number greater than zero." if not @resource.is_pos_float?(val)
+    end
+
+    defaultto 10
+  end
+
   newparam(:batch_sleep_time) do
     desc "Time to sleep between each batch"
 
