@@ -21,14 +21,19 @@ Puppet::Parser::Functions::newfunction(:discover, :type => :rvalue) do |vals|
 
   client = MCollective::RPC::Client.new(agent, :configfile => options[:config], :options => options)
 
-  if filter["compound_filter"]
-    raise "Compound filters must be strings" unless filter["compound_filter"].is_a?(String)
-    client.compound_filter(filter["compound_filter"])
+  if filter["compound"]
+    raise "Compound filters must be strings" unless filter["compound"].is_a?(String)
+    client.compound_filter(filter["compound"])
   end
 
-  Array(filter["identity_filter"]).each {|f| client.identity_filter f}
-  Array(filter["class_filter"]).each {|f| client.class_filter f}
-  Array(filter["fact_filter"]).each {|f| client.fact_filter f}
+  Array(filter["identity"]).each {|f| client.identity_filter f}
+  Array(filter["I"]).each {|f| client.identity_filter f}
+  Array(filter["class"]).each {|f| client.class_filter f}
+  Array(filter["C"]).each {|f| client.class_filter f}
+  Array(filter["fact"]).each {|f| client.fact_filter f}
+  Array(filter["F"]).each {|f| client.fact_filter f}
+  Array(filter["agent"]).each {|f| client.agent_filter f}
+  Array(filter["A"]).each {|f| client.agent_filter f}
 
   Puppet.info("Discovering nodes matching filter using %s method for %d seconds" % [client.client.discoverer.discovery_method, client.discovery_timeout])
 

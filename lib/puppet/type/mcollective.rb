@@ -77,7 +77,7 @@ Puppet::Type.newtype(:mcollective) do
     def sync
       stats = provider.call_rpc
 
-      stats[:nodes] == 1 ? nodes = "node" : nodes = "node"
+      stats[:nodes] == 1 ? nodes = "node" : nodes = "nodes"
       stats[:tries] == 1 ? tries = "try" : tries = "tries"
 
       @sync_msg = "%s#%s executed succesfully on %d %s after %d %s" % [resource[:agent], resource[:action], stats[:nodes], nodes, stats[:tries], tries]
