@@ -50,7 +50,7 @@ has been resolved the orchestration can just be run again.
 Code Walkthrough
 ================
 
-The full script can be seen in the file [app_cluster_upgrade.mc.](app_cluster_upgrade.mc.).  This is a
+The full script can be seen in the file [app_cluster_upgrade.mc.](https://github.com/ripienaar/puppet-mcollective/blob/master/example/web_deploy/app_cluster_upgrade.mc).  This is a
 fairly complex example specifically to demonstrate a complexity that you might
 find in the real world.  It interacts with 5 different agents and various
 different nodes in parallel.
