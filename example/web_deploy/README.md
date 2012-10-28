@@ -154,7 +154,7 @@ test to be sure mcollective is able to communicate with these node.
 
 MCollective can now do discovery against data caches, databases, flatfiles etc
 so you are not guaranteed to only speak to machines that are up.  This is ideal
-for deployers since you know typically want to address a set of pre-known hosts
+for deployers since you typically want to address a set of pre-known hosts
 rather than rely on network discovery.
 
 
@@ -192,8 +192,8 @@ this to work.
 
 With the upgrade complete we call to *nrpe#runcommand* to check the load average
 on all the HTTP servers.  We allow this to retry 10 times - the default sleep
-between tries is 10 seconds.  This gives the load average to recover back to
-normal levels within 100 seconds of the deploy.
+between tries is 10 seconds.  This gives the load average 100 seconds to recover
+back to normal levels after the deploy.
 
 
       haproxy::enable{$name:
