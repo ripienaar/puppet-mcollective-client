@@ -1,5 +1,6 @@
 Puppet::Parser::Functions::newfunction(:get_fact, :type => :rvalue) do |vals|
   require 'mcollective'
+  require 'mcollective/orchestrate'
 
   agent = "rpcutil"
   fact = nil
@@ -15,30 +16,23 @@ Puppet::Parser::Functions::newfunction(:get_fact, :type => :rvalue) do |vals|
     raise("Need to supply fact name and filter when retrieving a fact")
   end
 
-  options = {:verbose      => false,
-             :config       => MCollective::Util.config_file_for_user,
-             :progress_bar => false,
-             :filter       => MCollective::Util.empty_filter}
+  discovered = MCollective::Orchestrate::Discover.new(agent, filter)
+  node = discovered.nodes.first
 
-  client = MCollective::RPC::Client.new(agent, :configfile => options[:config], :options => options)
+  raise("Did not find any nodes matching filter") if discovered.size == 0
+  raise("Found more than 1 node matching filter, cannot continue") unless discovered.size == 1
 
-  if filter["compound_filter"]
-    raise "Compound filters must be strings" unless resource[:compound_filter].is_a?(String)
-    client.compound_filter(filter[:compound_filter])
+  reply = MCollective::Orchestrate::Mco.rpc agent, :get_fact, :stdout => StringIO.new do
+    @arguments = {:fact => fact}
+
+    discovered.limit @client
   end
 
-  Array(filter["identity_filter"]).each {|f| client.identity_filter f}
-  Array(filter["class_filter"]).each {|f| client.class_filter f}
-  Array(filter["fact_filter"]).each {|f| client.fact_filter f}
+  raise("Did not receive any results from %s" % node) if reply[:stats].responses == 0
 
-  raise("Did not find any nodes matching filter") if client.discover.size == 0
-  raise("Found more than 1 node matching filter, cannot continue") unless client.discover.size == 1
+  fact_value = reply[:results].first
 
-  results = client.get_fact(:fact => fact)
+  raise("Could not retrieve fact %s from %s: %s" % [fact, node, fact_value[:statusmsg]]) unless reply[:stats].failcount == 0
 
-  raise("Did not receive any results from %s" % client.discover.first) if results.empty?
-
-  results.first[:data][:value]
+  fact_value[:data][:value]
 end
-
-
