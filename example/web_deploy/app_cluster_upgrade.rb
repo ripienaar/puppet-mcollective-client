@@ -6,9 +6,9 @@ def orchestrate
   ask("App Revision", :revision)
   ask("Cluster Name", :cluster)
 
-  validate(@backend, :string)
-  validate(@revision, :string)
-  validate(@cluster, :string)
+  validate(@backend, /\A[a-z]+\Z/)
+  validate(@revision, /\A\d+\Z/)
+  validate(@cluster, /\A[a-z]+\Z/)
 
   announce("Updating cluster %s" % @cluster)
 

@@ -12,7 +12,13 @@ module MCollective
     def initialize(orchestration_name, options={})
       Applications.load_config unless options[:skip_config]
 
-      @application = Application.new("%s.mc" % orchestration_name, :skip_loading => true)
+      if File.exist?(orchestration_name.to_s)
+        script = orchestration_name.to_s
+      else
+        script = "%s.mc" % orchestration_name
+      end
+
+      @application = Application.new(script, :skip_loading => true)
 
       @application.load_script unless options[:skip_loading]
     end

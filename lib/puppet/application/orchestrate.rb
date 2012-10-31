@@ -4,6 +4,7 @@ require 'puppet/run'
 class Puppet::Application::Orchestrate < Puppet::Application
   option("--debug","-d")
   option("--verbose","-v")
+  option("--ruby","-r")
 
   def help
     <<-HELP
@@ -16,7 +17,7 @@ Parses a Puppet Orchestration script to the local MCollective infrastructure
 
 USAGE
 -----
-puppet orchestrate [-d|--debug] [-v|--verbose] <file> <var=val> <var=val> ...
+puppet orchestrate [-d|--debug] [-v|--verbose] [-r|--ruby] <file> <var=val> <var=val> ...
 
 DESCRIPTION
 -----------
@@ -47,6 +48,40 @@ HELP
   end
 
   def main
+    options[:ruby] ? ruby_main : puppet_main
+  end
+
+  def ruby_main
+    require 'mcollective'
+    require 'mcollective/orchestrate'
+
+    if command_line.args.length > 0
+      script = command_line.args.shift
+
+      script = "%s.rb" % script unless script =~ /\.rb$/
+
+      raise("Could not find orchestration script %s" % script) unless ::File.exist?(script)
+    else
+      raise "Please provide a script to run"
+    end
+
+    if command_line.args.length > 0
+      while arg = command_line.args.shift
+        if arg =~ /\A([a-z_\d]+)\s*=\s*(.+)\Z/
+          ENV[$1.upcase] = $2
+        end
+      end
+    end
+
+    begin
+      o = MCollective::Orchestrate.new(script)
+      o.application.orchestrate
+    rescue => e
+      puts "Could not complete orchestration: %s" % MCollective::Util.colorize(:red, e)
+    end
+  end
+
+  def puppet_main
     if command_line.args.length > 0
       manifest = command_line.args.shift
 
