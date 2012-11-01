@@ -61,5 +61,5 @@ or fail result.
 In the Ruby DSL you have access to all the data and stats and can do any kind of
 branching or logic based on that.
 
-See the files [README-ruby.md] and [README-puppet.md] for a walkthrough of the
+See the files [README-ruby.md](README-ruby.md) and [README-puppet.md](README-puppet.md) for a walkthrough of the
 two different orchestration scripts.
