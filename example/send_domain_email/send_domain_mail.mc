@@ -3,8 +3,6 @@
 # that domain and then forces a delivery attempt on all the mail
 # in all the mailqueue on all servers
 
-notice(get_fact("operatingsystem", {fact => "fqdn=dev1.devco.net"}))
-
 if ($recipient == undef) { fail('Please specify a recipient domain with $recipient') }
 
 # count how many machines have email for the recipient domain using the domain_mailq()
