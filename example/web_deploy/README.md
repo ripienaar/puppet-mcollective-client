@@ -16,7 +16,7 @@ The script is written using the Puppet DSL and takes advantage of the
 relationship system between resources, ordering, classes, facts and defines to
 create a real time multi node orchestration script.
 
-![Web App Overview](https://raw.github.com/ripienaar/puppet-mcollective/master/example/web_deploy/web_deploy.jpg)
+![Web App Overview](https://raw.github.com/ripienaar/puppet-mcollective-client/master/example/web_deploy/web_deploy.jpg)
 
 We will follow a playbook for upgrading the web app, for the sake of
 demonstration we will update the stack one cluster at a time.  The orchestration
